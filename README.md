@@ -57,8 +57,22 @@ mvn clean package && java -jar target/benchmark.jar
 
 + 测试环境是一个vsphere管理的vm，4c8g，宿主机是大路货R730，CPU是E5-2620 v4
 + 虚机系统是centos 7.6，还跑了不少玩意儿在上面，但free+cache的内存怎么也有4g，负载很低
-+ java -jar target/benchmark.jar，什么都不加，缺省跑出来的是吞吐量指标，随用随new大概50w上下的样子，而共享的是200w左右的样子，他还有一个Error值估计在吞吐量是指的delta值，所以差距还是很明显的
-+ 但是如果```java -jar target/benchmark.jar -bm sample```是统计的样本的响应时间，每个操作消耗的时间，这个就没那么明显了，这个直接copy下来执行结果
++ java -jar target/benchmark.jar，什么都不加，缺省跑出来的是吞吐量指标，随用随new大概50w上下的样子，而共享的是200w左右的样子，他还有一个Error值估计在吞吐量是指的delta值，所以差距还是很明显的，如下：
+```
+# Run complete. Total time: 00:16:43
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark                                          Mode  Cnt        Score       Error  Units
+MyBenchmark.testSimpleDateFormatEveryNew          thrpt   25   550059.182 ±  5090.087  ops/s
+MyBenchmark.testSimpleDateFormatEveryThreadLocal  thrpt   25  2035301.197 ± 18864.674  ops/s
+```
++ 但是如果```java -jar target/benchmark.jar -bm sample```是统计的样本的响应时间，每个操作消耗的时间，这个就没那么明显了，这个直接copy下来某次的执行结果看着玩儿了
++ 所以再没跑更多测试的情况下可以说，稍具规模的负载下避免每次new一个实例是有价值的，可以显著的提升吞吐量
 
 ```
 # Run complete. Total time: 00:16:44
@@ -97,6 +111,7 @@ MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThread
 + [Stack Overflow上的一个问题及高票答案](https://stackoverflow.com/questions/504103/how-do-i-write-a-correct-micro-benchmark-in-java)，这里还提到其他一些微基准框架
 + [中文搬运工一枚](https://benjaminwhx.com/2018/06/15/%E4%BD%BF%E7%94%A8JMH%E5%81%9A%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/)，有intellij里面配置的方法，还有一些细节注意事项，值得好好参考
 + [中文更高级搬运工一枚](https://www.cnkirito.moe/java-jmh/)，提供了不少原理性的参考信息
++ [参考多多益善](https://cloud.tencent.com/developer/article/1119316)，这个内容不多，但是写的很流畅
 
 ## 结语
 

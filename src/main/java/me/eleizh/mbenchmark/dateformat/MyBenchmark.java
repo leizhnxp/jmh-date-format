@@ -48,13 +48,13 @@ public class MyBenchmark {
     private ThreadLocal<SimpleDateFormat> sdf;
 
     @Benchmark
-    public void testSimpleDateFormatEveryNew() {
+    public String testSimpleDateFormatEveryNew() {
         DateFormat df = new SimpleDateFormat(pattern);
-        df.format(new Date());
+        return df.format(new Date());
     }
 
     @Benchmark
-    public void testSimpleDateFormatEveryThreadLocal(){
-        sdf.get().format(new Date());
+    public String testSimpleDateFormatEveryThreadLocal(){
+        return sdf.get().format(new Date());
     }
 }
