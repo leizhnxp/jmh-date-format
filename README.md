@@ -116,3 +116,50 @@ MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThread
 ## 结语
 
 没有测量，没有发言权，让玄学和猜测让位给理性和逻辑；值得深入搞一搞的玩意儿
+
+## 补充
+
+最后又启动多线程的跑一个all的测试```java -jar target/benchmarks.jar -bm all -t 4```，得到结果抄录如下：
+
+```
+# Run complete. Total time: 00:50:18
+
+REMEMBER: The numbers below are just data. To gain reusable insights, you need to follow up on
+why the numbers are the way they are. Use profilers (see -prof, -lprof), design factorial
+experiments, perform baseline and negative tests that provide experimental control, make sure
+the benchmarking environment is safe on JVM/OS/HW level, ask for reviews from the domain experts.
+Do not assume the numbers tell you what you want them to tell.
+
+Benchmark                                                                                        Mode       Cnt        Score        Error  Units
+MyBenchmark.testSimpleDateFormatEveryNew                                                        thrpt        25  2085293.720 ±  14405.968  ops/s
+MyBenchmark.testSimpleDateFormatEveryThreadLocal                                                thrpt        25  6516543.257 ± 197561.160  ops/s
+MyBenchmark.testSimpleDateFormatEveryNew                                                         avgt        25       ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal                                                 avgt        25       ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryNew                                                       sample  31914825       ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryNew:testSimpleDateFormatEveryNew·p0.00                    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryNew:testSimpleDateFormatEveryNew·p0.50                    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryNew:testSimpleDateFormatEveryNew·p0.90                    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryNew:testSimpleDateFormatEveryNew·p0.95                    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryNew:testSimpleDateFormatEveryNew·p0.99                    sample                 ≈ 10⁻⁵                s/op
+MyBenchmark.testSimpleDateFormatEveryNew:testSimpleDateFormatEveryNew·p0.999                   sample                 ≈ 10⁻⁵                s/op
+MyBenchmark.testSimpleDateFormatEveryNew:testSimpleDateFormatEveryNew·p0.9999                  sample                 ≈ 10⁻³                s/op
+MyBenchmark.testSimpleDateFormatEveryNew:testSimpleDateFormatEveryNew·p1.00                    sample                  0.049                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal                                               sample  25173800       ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThreadLocal·p0.00    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThreadLocal·p0.50    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThreadLocal·p0.90    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThreadLocal·p0.95    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThreadLocal·p0.99    sample                 ≈ 10⁻⁶                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThreadLocal·p0.999   sample                 ≈ 10⁻⁵                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThreadLocal·p0.9999  sample                 ≈ 10⁻⁴                s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal:testSimpleDateFormatEveryThreadLocal·p1.00    sample                  0.028                s/op
+MyBenchmark.testSimpleDateFormatEveryNew                                                           ss         5        0.059 ±      0.017   s/op
+MyBenchmark.testSimpleDateFormatEveryThreadLocal                                                   ss         5        0.057 ±      0.020   s/op
+
+```
+
+每次跑完那段箴言也够打击人的，不负责任翻译如下：
+
+要记得：下面那些数字仅仅是数据而已。要获得切实的结论（字面是：要获得可以复用的观点？），你需要刨根问底的搞明白这些数字是他们展现的这个样子。使用分析工具（参考 -prof，-lprof），设计[factorial experiments](https://en.wikipedia.org/wiki/Factorial_experiment)，执行提供实验控制的基线喝福祥测试，确保测评环境在 JVM/OS/HW 级别是安全的，并且让领域专家来评审。不要假设数字告诉了你那些你想要他们说明的东西
+
+所以我目前只能谨慎的认为，重复利用的SimpleDateFormat比随用随new的SimpleDateFormat从代码管理意义可能比性能层面更有意义
